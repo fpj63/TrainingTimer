@@ -23,12 +23,14 @@
     </nav>
 
     <main class="flex-grow relative overflow-y-auto p-4 pb-24">
+        
         <section id="page-seven" class="page-content space-y-6">
             <div class="glass p-4 rounded-2xl">
                 <h2 class="text-xl font-black mb-4 text-blue-400 uppercase">Circuit 7-Minutes</h2>
-                <div class="grid grid-cols-2 gap-4">
-                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Travail (s)</label><input type="number" id="7m-work" value="30"></div>
-                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Repos (s)</label><input type="number" id="7m-rest" value="10"></div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div><label class="block text-[10px] text-gray-400 mb-1 uppercase text-center">Prep (s)</label><input type="number" id="7m-prep" value="10" class="w-full"></div>
+                    <div><label class="block text-[10px] text-gray-400 mb-1 uppercase text-center">Travail (s)</label><input type="number" id="7m-work" value="30" class="w-full"></div>
+                    <div><label class="block text-[10px] text-gray-400 mb-1 uppercase text-center">Repos (s)</label><input type="number" id="7m-rest" value="10" class="w-full"></div>
                 </div>
             </div>
         </section>
@@ -37,18 +39,20 @@
             <div class="glass p-4 rounded-2xl">
                 <h2 class="text-xl font-black mb-4 text-red-500 uppercase">HIIT Intervalle</h2>
                 <div class="grid grid-cols-2 gap-4">
-                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Travail (s)</label><input type="number" id="hiit-work" value="20"></div>
-                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Repos (s)</label><input type="number" id="hiit-rest" value="10"></div>
-                    <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1 uppercase">Répétitions</label><input type="number" id="hiit-rounds" value="8"></div>
+                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Préparation (s)</label><input type="number" id="hiit-prep" value="15" class="w-full"></div>
+                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Travail (s)</label><input type="number" id="hiit-work" value="20" class="w-full"></div>
+                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Repos (s)</label><input type="number" id="hiit-rest" value="10" class="w-full"></div>
+                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Répétitions</label><input type="number" id="hiit-rounds" value="8" class="w-full"></div>
                 </div>
             </div>
         </section>
 
         <section id="page-emom" class="page-content hidden space-y-6">
             <div class="glass p-4 rounded-2xl">
-                <h2 class="text-xl font-black mb-4 text-purple-500 uppercase">EMOM (Chaque minute)</h2>
-                <div class="grid grid-cols-1">
-                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Nombre de minutes</label><input type="number" id="emom-rounds" value="10"></div>
+                <h2 class="text-xl font-black mb-4 text-purple-500 uppercase">EMOM</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Préparation (s)</label><input type="number" id="emom-prep" value="10" class="w-full"></div>
+                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Minutes</label><input type="number" id="emom-rounds" value="10" class="w-full"></div>
                 </div>
             </div>
         </section>
@@ -83,7 +87,7 @@
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const msg = new SpeechSynthesisUtterance(text);
-                msg.volume = 1.0; msg.rate = 1.0; msg.lang = 'en-US';
+                msg.volume = 1.0; msg.lang = 'en-US';
                 window.speechSynthesis.speak(msg);
             }
         }
@@ -118,13 +122,11 @@
             else runEMOM();
         }
 
-        // --- GESTION DES BIPS ET DU TEMPS ---
         function runTimerLogic(phaseName, duration, onComplete, nextExerciseName = "") {
             state.phase = phaseName;
             state.currentTime = duration;
             state.totalDuration = duration;
 
-            // Annonces Vocales au lancement
             if (phaseName === 'prep' || phaseName === 'work') speak("GO");
             else if (phaseName === 'rest') speak("REST");
 
@@ -133,11 +135,11 @@
 
             clearInterval(state.timer);
             state.timer = setInterval(() => {
-                // Bip au milieu de la séquence
+                // BIB au milieu
                 if (state.currentTime === Math.floor(state.totalDuration / 2) && state.totalDuration > 2) {
                     playBeep(440, 0.2);
                 }
-                // Bips sur les 3 dernières secondes (3, 2, 1)
+                // BIB sur les 3 dernières secondes
                 if (state.currentTime <= 3 && state.currentTime > 0) {
                     playBeep(880, 0.1);
                 }
@@ -146,7 +148,7 @@
 
                 if (state.currentTime < 0) {
                     clearInterval(state.timer);
-                    playBeep(1200, 0.4); // Bip de fin de séquence
+                    playBeep(1200, 0.4); 
                     onComplete();
                 }
                 render();
@@ -154,6 +156,7 @@
         }
 
         function runSeven() {
+            const p = parseInt(document.getElementById('7m-prep').value);
             const w = parseInt(document.getElementById('7m-work').value);
             const r = parseInt(document.getElementById('7m-rest').value);
             state.exerciseIdx = 0;
@@ -171,10 +174,11 @@
                     }
                 }
             };
-            runTimerLogic('prep', 5, nextStep, "PRÉPARATION");
+            runTimerLogic('prep', p, nextStep, "PRÉPARATION");
         }
 
         function runHIIT() {
+            const p = parseInt(document.getElementById('hiit-prep').value);
             const w = parseInt(document.getElementById('hiit-work').value);
             const r = parseInt(document.getElementById('hiit-rest').value);
             const rds = parseInt(document.getElementById('hiit-rounds').value);
@@ -193,10 +197,11 @@
                     }
                 }
             };
-            runTimerLogic('prep', 5, nextStep, "PRÉPARATION");
+            runTimerLogic('prep', p, nextStep, "PRÉPARATION");
         }
 
         function runEMOM() {
+            const p = parseInt(document.getElementById('emom-prep').value);
             const rds = parseInt(document.getElementById('emom-rounds').value);
             state.round = 1;
 
@@ -211,7 +216,7 @@
                     finish();
                 }
             };
-            runTimerLogic('prep', 5, nextStep, "PRÉPARATION");
+            runTimerLogic('prep', p, nextStep, "PRÉPARATION");
         }
 
         function render() {
