@@ -28,11 +28,8 @@
         }
 
         /* --- ADVANCED EXERCISE ANIMATIONS --- */
-        
-        /* General Body Parts */
         .body-part { transform-origin: center; transition: all 0.3s ease; }
         
-        /* 1. Jumping Jacks */
         @keyframes jj-arms { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-140deg); } }
         @keyframes jj-legs { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(15px); } }
         .anim-jumping-jacks .arm-l { animation: jj-arms 0.6s infinite; transform-origin: 45px 40px; }
@@ -40,31 +37,24 @@
         .anim-jumping-jacks .leg-l { animation: jj-legs 0.6s infinite; }
         .anim-jumping-jacks .leg-r { animation: jj-legs 0.6s infinite reverse; }
 
-        /* 2. Wall Sit / Squats */
         @keyframes squat-body { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(25px); } }
         .anim-squats .body-group, .anim-wall-sit .body-group, .anim-step-up-onto-chair .body-group { animation: squat-body 1.2s infinite; }
         
-        /* 3. Push Ups */
         @keyframes pushup-body { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0.4); } }
         .anim-push-ups .body-group, .anim-push-up-rotation .body-group, .anim-triceps-dips .body-group { 
             animation: pushup-body 1.5s infinite; 
             transform-origin: bottom;
         }
 
-        /* 4. Crunches */
         @keyframes crunch-body { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-30deg); } }
         .anim-abdominal-crunches .body-group { animation: crunch-body 1s infinite; transform-origin: 50px 70px; }
 
-        /* 5. High Knees */
         @keyframes knee-up { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
         .anim-high-knees-running .leg-l { animation: knee-up 0.4s infinite; }
         .anim-high-knees-running .leg-r { animation: knee-up 0.4s infinite 0.2s; }
 
-        /* 6. Plank */
         @keyframes plank-vibe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(2px); } }
         .anim-plank .body-group { animation: plank-vibe 0.1s infinite; }
-
-        /* 7. Side Plank */
         .anim-side-plank .body-group { transform: rotate(-90deg) translateY(-20px); animation: plank-vibe 0.1s infinite; }
 
         .glass {
@@ -91,17 +81,14 @@
 </head>
 <body class="h-screen flex flex-col">
 
-    <!-- Header / Navigation -->
     <nav class="flex justify-around bg-black border-b border-gray-800 pt-4">
         <button onclick="switchPage('seven')" id="tab-seven" class="pb-3 px-2 font-bold transition-all tab-active">7-MIN</button>
         <button onclick="switchPage('hiit')" id="tab-hiit" class="pb-3 px-2 font-bold transition-all text-gray-500">HIIT</button>
         <button onclick="switchPage('emom')" id="tab-emom" class="pb-3 px-2 font-bold transition-all text-gray-500">EMOM</button>
     </nav>
 
-    <!-- Main Content Area -->
     <main class="flex-grow relative overflow-y-auto p-4 pb-24">
         
-        <!-- PAGE 1: 7 MINUTE WORKOUT -->
         <section id="page-seven" class="page-content space-y-6">
             <div class="glass p-4 rounded-2xl">
                 <h2 class="text-xl font-black mb-4 text-blue-400 uppercase tracking-tighter">7-Minute Circuit</h2>
@@ -122,63 +109,36 @@
             </div>
         </section>
 
-        <!-- PAGE 2: HIIT TIMER -->
         <section id="page-hiit" class="page-content hidden space-y-4">
             <div class="glass p-4 rounded-2xl">
                 <h2 class="text-xl font-black mb-4 text-red-500 uppercase">HIIT Interval</h2>
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1 uppercase">Prep (s)</label>
-                        <input type="number" id="hiit-prep" value="10">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1 uppercase">Work (s)</label>
-                        <input type="number" id="hiit-work" value="20">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1 uppercase">Rest (s)</label>
-                        <input type="number" id="hiit-rest" value="10">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1 uppercase">Rounds</label>
-                        <input type="number" id="hiit-rounds" value="8">
-                    </div>
-                    <div class="col-span-2">
-                        <label class="block text-xs text-gray-400 mb-1 uppercase">Cool Down (min)</label>
-                        <input type="number" id="hiit-cool" value="1" step="0.5">
-                    </div>
+                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Prep (s)</label><input type="number" id="hiit-prep" value="10"></div>
+                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Work (s)</label><input type="number" id="hiit-work" value="20"></div>
+                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Rest (s)</label><input type="number" id="hiit-rest" value="10"></div>
+                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Rounds</label><input type="number" id="hiit-rounds" value="8"></div>
+                    <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1 uppercase">Cool Down (min)</label><input type="number" id="hiit-cool" value="1" step="0.5"></div>
                 </div>
             </div>
         </section>
 
-        <!-- PAGE 3: EMOM TIMER -->
         <section id="page-emom" class="page-content hidden space-y-6">
             <div class="glass p-4 rounded-2xl">
                 <h2 class="text-xl font-black mb-4 text-purple-500 uppercase">EMOM</h2>
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1 uppercase">Prep (s)</label>
-                        <input type="number" id="emom-prep" value="10">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1 uppercase">Repeats</label>
-                        <input type="number" id="emom-rounds" value="10">
-                    </div>
+                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Prep (s)</label><input type="number" id="emom-prep" value="10"></div>
+                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Repeats</label><input type="number" id="emom-rounds" value="10"></div>
                 </div>
-                <p class="text-xs text-gray-400 mt-4 italic">* Work every minute. Beep at 30s mark.</p>
             </div>
         </section>
 
-        <!-- ACTIVE TIMER OVERLAY -->
         <div id="timer-overlay" class="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center p-6 hidden">
             <div class="absolute top-6 left-6">
                 <button onclick="stopTimer()" class="text-gray-400 uppercase text-xs font-bold border border-gray-700 px-6 py-2 rounded-full">Exit</button>
             </div>
-            
             <div id="exercise-name" class="text-3xl font-black text-center mb-1 uppercase tracking-tighter text-blue-400">READY?</div>
             <div id="phase-label" class="text-sm font-bold text-gray-500 uppercase mb-6 tracking-widest">PREPARATION</div>
 
-            <!-- Visualization -->
             <div class="relative w-64 h-64 flex items-center justify-center mb-8">
                 <svg class="w-full h-full">
                     <circle cx="128" cy="128" r="120" stroke="#1a1a1a" stroke-width="8" fill="transparent" />
@@ -187,38 +147,28 @@
                 <div id="time-display" class="absolute text-7xl font-black tracking-tighter">00:00</div>
             </div>
 
-            <!-- Animation Area -->
             <div id="animation-container" class="w-full max-w-xs flex flex-col items-center">
                 <div id="animation-box" class="w-40 h-40 bg-white/5 rounded-2xl flex items-center justify-center mb-4 overflow-hidden border border-white/10">
                     <svg id="avatar-svg" viewBox="0 0 100 100" class="w-32 h-32 text-blue-400 fill-current">
                         <g class="body-group">
-                            <!-- Head -->
                             <circle cx="50" cy="25" r="8" />
-                            <!-- Torso -->
                             <rect x="46" y="35" width="8" height="30" rx="4" />
-                            <!-- Arms -->
                             <rect class="body-part arm-l" x="38" y="35" width="6" height="25" rx="3" />
                             <rect class="body-part arm-r" x="56" y="35" width="6" height="25" rx="3" />
-                            <!-- Legs -->
                             <rect class="body-part leg-l" x="42" y="62" width="6" height="28" rx="3" />
                             <rect class="body-part leg-r" x="52" y="62" width="6" height="28" rx="3" />
                         </g>
                     </svg>
                 </div>
-                
-                <!-- Next Up Display -->
                 <div id="next-up-container" class="next-up-card w-full p-4 rounded-xl text-center hidden">
                     <div class="text-[10px] text-blue-400 font-bold uppercase mb-1">Upcoming</div>
                     <div id="next-exercise-name" class="text-lg font-black text-white uppercase tracking-tight">Wall Sit</div>
                 </div>
             </div>
-
             <div id="round-counter" class="mt-8 text-sm font-bold text-gray-500 uppercase tracking-widest">ROUND 1 / 8</div>
         </div>
-
     </main>
 
-    <!-- Global Controls -->
     <div id="footer-controls" class="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent flex justify-center">
         <button id="start-btn" onclick="startWorkout()" class="bg-blue-600 hover:bg-blue-500 text-white w-full max-w-xs py-4 rounded-2xl text-xl font-black shadow-lg shadow-blue-900/20 transform active:scale-95 transition-all">
             START WORKOUT
@@ -226,7 +176,6 @@
     </div>
 
     <script>
-        // --- CONSTANTS & DATA ---
         const SEVEN_MIN_EXERCISES = [
             "Jumping Jacks", "Wall Sit", "Push-Ups", "Abdominal Crunches", 
             "Step-up onto Chair", "Squats", "Triceps Dips", "Plank", 
@@ -242,10 +191,34 @@
             round: 1,
             totalRounds: 1,
             exerciseIdx: 0,
-            audioCtx: null
+            audioCtx: null,
+            wakeLock: null
         };
 
-        // --- AUDIO ENGINE ---
+        // --- WAKE LOCK (KEEP SCREEN ON) ---
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    state.wakeLock = await navigator.wakeLock.request('screen');
+                }
+            } catch (err) {
+                console.error("WakeLock failed:", err);
+            }
+        }
+
+        // --- VOICE ENGINE ---
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                // Cancel any ongoing speech to avoid overlap
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.volume = 1.0; 
+                utterance.rate = 1.0;
+                utterance.lang = 'en-US';
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
         function playBeep(frequency, duration) {
             if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const osc = state.audioCtx.createOscillator();
@@ -260,14 +233,12 @@
             osc.stop(state.audioCtx.currentTime + duration);
         }
 
-        // --- NAVIGATION ---
         function switchPage(page) {
             state.currentPage = page;
             document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
             document.getElementById(`page-${page}`).classList.remove('hidden');
-            
             document.querySelectorAll('nav button').forEach(b => {
-                b.classList.remove('tab-active');
+                b.classList.remove('tab-active', 'text-blue-400');
                 b.classList.add('text-gray-500');
             });
             const activeTab = document.getElementById(`tab-${page}`);
@@ -275,12 +246,9 @@
             activeTab.classList.remove('text-gray-500');
 
             const startBtn = document.getElementById('start-btn');
-            if(page === 'seven') startBtn.className = "bg-blue-600 text-white w-full max-w-xs py-4 rounded-2xl text-xl font-black transition-all";
-            if(page === 'hiit') startBtn.className = "bg-red-600 text-white w-full max-w-xs py-4 rounded-2xl text-xl font-black transition-all";
-            if(page === 'emom') startBtn.className = "bg-purple-600 text-white w-full max-w-xs py-4 rounded-2xl text-xl font-black transition-all";
+            startBtn.className = `w-full max-w-xs py-4 rounded-2xl text-xl font-black transition-all ${page === 'seven' ? 'bg-blue-600' : page === 'hiit' ? 'bg-red-600' : 'bg-purple-600'} text-white`;
         }
 
-        // --- TIMER UI HELPERS ---
         function formatTime(seconds) {
             const m = Math.floor(seconds / 60);
             const s = seconds % 60;
@@ -296,24 +264,21 @@
 
         function setAnimation(exerciseName, isWorking) {
             const container = document.getElementById('animation-box');
-            container.className = "w-40 h-40 bg-white/5 rounded-2xl flex items-center justify-center mb-4 overflow-hidden border border-white/10"; // reset
-            
-            if (!isWorking) {
-                container.classList.add('opacity-20');
-                return;
-            }
-
+            container.className = "w-40 h-40 bg-white/5 rounded-2xl flex items-center justify-center mb-4 overflow-hidden border border-white/10";
+            if (!isWorking) { container.classList.add('opacity-20'); return; }
             const slug = exerciseName.toLowerCase().replace(/\s+/g, '-');
             container.classList.add(`anim-${slug}`);
         }
 
         function stopTimer() {
             clearInterval(state.timer);
+            if (state.wakeLock) { state.wakeLock.release(); state.wakeLock = null; }
             document.getElementById('timer-overlay').classList.add('hidden');
             state.timer = null;
         }
 
         function startWorkout() {
+            requestWakeLock();
             if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             state.audioCtx.resume();
             document.getElementById('timer-overlay').classList.remove('hidden');
@@ -323,7 +288,6 @@
             else if (state.currentPage === 'emom') runEMOM();
         }
 
-        // --- 7 MINUTE ENGINE ---
         function runSevenMin() {
             const work = parseInt(document.getElementById('7m-work').value);
             const rest = parseInt(document.getElementById('7m-rest').value);
@@ -333,172 +297,4 @@
             const startPhase = (phase, duration, name) => {
                 state.phase = phase;
                 state.currentTime = duration;
-                state.totalDuration = duration;
-
-                const nextUpContainer = document.getElementById('next-up-container');
-                const nextNameDisplay = document.getElementById('next-exercise-name');
-                const phaseLabel = document.getElementById('phase-label');
-                const nameLabel = document.getElementById('exercise-name');
-
-                phaseLabel.innerText = phase.toUpperCase();
-                nameLabel.innerText = name;
-                document.getElementById('round-counter').innerText = `EXERCISE ${state.exerciseIdx + 1} / ${state.totalRounds}`;
-
-                if (phase === 'work') {
-                    phaseLabel.style.color = '#3b82f6';
-                    document.getElementById('progress-circle').style.stroke = '#3b82f6';
-                    nextUpContainer.classList.add('hidden');
-                    setAnimation(SEVEN_MIN_EXERCISES[state.exerciseIdx], true);
-                } else {
-                    phaseLabel.style.color = '#9ca3af';
-                    document.getElementById('progress-circle').style.stroke = '#4b5563';
-                    
-                    const nextEx = SEVEN_MIN_EXERCISES[state.exerciseIdx];
-                    if (nextEx) {
-                        nextUpContainer.classList.remove('hidden');
-                        nextNameDisplay.innerText = nextEx;
-                    }
-                    setAnimation("", false);
-                }
-
-                clearInterval(state.timer);
-                state.timer = setInterval(() => {
-                    state.currentTime--;
-                    tick(work, 5); 
-
-                    if (state.currentTime < 0) {
-                        clearInterval(state.timer);
-                        if (phase === 'work') {
-                            state.exerciseIdx++;
-                            if (state.exerciseIdx < state.totalRounds) {
-                                startPhase('rest', rest, "RECOVER");
-                            } else {
-                                finish();
-                            }
-                        } else {
-                            startPhase('work', work, SEVEN_MIN_EXERCISES[state.exerciseIdx]);
-                        }
-                    }
-                    render();
-                }, 1000);
-            };
-
-            startPhase('prep', 10, "GET READY");
-        }
-
-        // --- HIIT ENGINE ---
-        function runHIIT() {
-            const prep = parseInt(document.getElementById('hiit-prep').value);
-            const work = parseInt(document.getElementById('hiit-work').value);
-            const rest = parseInt(document.getElementById('hiit-rest').value);
-            const rounds = parseInt(document.getElementById('hiit-rounds').value);
-            const cool = parseFloat(document.getElementById('hiit-cool').value) * 60;
-            
-            state.round = 1;
-            state.totalRounds = rounds;
-            document.getElementById('next-up-container').classList.add('hidden');
-
-            const startPhase = (phase, duration) => {
-                state.phase = phase;
-                state.currentTime = duration;
-                state.totalDuration = duration;
-                document.getElementById('phase-label').innerText = phase.toUpperCase();
-                document.getElementById('exercise-name').innerText = phase === 'work' ? "GO!" : "REST";
-                document.getElementById('round-counter').innerText = `ROUND ${state.round} / ${rounds}`;
-                document.getElementById('progress-circle').style.stroke = phase === 'work' ? '#ef4444' : '#4b5563';
-                setAnimation(phase === 'work' ? "squats" : "", phase === 'work');
-                
-                clearInterval(state.timer);
-                state.timer = setInterval(() => {
-                    state.currentTime--;
-                    tick(work, 3);
-
-                    if (state.currentTime < 0) {
-                        if (phase === 'prep') startPhase('work', work);
-                        else if (phase === 'work') startPhase('rest', rest);
-                        else if (phase === 'rest') {
-                            state.round++;
-                            if (state.round <= rounds) startPhase('work', work);
-                            else startPhase('cool', cool);
-                        } else finish();
-                    }
-                    render();
-                }, 1000);
-            };
-            startPhase('prep', prep);
-        }
-
-        // --- EMOM ENGINE ---
-        function runEMOM() {
-            const prep = parseInt(document.getElementById('emom-prep').value);
-            const repeats = parseInt(document.getElementById('emom-rounds').value);
-            state.round = 1;
-            document.getElementById('next-up-container').classList.add('hidden');
-
-            const startPhase = (duration) => {
-                state.currentTime = duration;
-                state.totalDuration = 60;
-                document.getElementById('phase-label').innerText = "ROUND " + state.round;
-                document.getElementById('exercise-name').innerText = "WORK";
-                document.getElementById('progress-circle').style.stroke = '#a855f7';
-                setAnimation("jumping-jacks", true);
-
-                clearInterval(state.timer);
-                state.timer = setInterval(() => {
-                    state.currentTime--;
-                    if (state.currentTime === 30) playBeep(440, 0.3);
-                    if (state.currentTime <= 3 && state.currentTime > 0) playBeep(880, 0.1);
-                    if (state.currentTime === 0) playBeep(1200, 0.5);
-
-                    if (state.currentTime < 0) {
-                        state.round++;
-                        if (state.round <= repeats) startPhase(60);
-                        else finish();
-                    }
-                    render();
-                }, 1000);
-            };
-            
-            state.currentTime = prep;
-            state.totalDuration = prep;
-            document.getElementById('phase-label').innerText = "PREPARING";
-            setAnimation("", false);
-            state.timer = setInterval(() => {
-                state.currentTime--;
-                if (state.currentTime <= 3 && state.currentTime > 0) playBeep(880, 0.1);
-                if (state.currentTime < 0) startPhase(60);
-                render();
-            }, 1000);
-        }
-
-        // --- GLOBAL UTILS ---
-        function tick(workTime, countdownLimit) {
-            if (state.phase === 'work' && state.currentTime === Math.floor(workTime / 2)) playBeep(440, 0.3);
-            if (state.currentTime <= countdownLimit && state.currentTime > 0) playBeep(880, 0.1);
-            if (state.currentTime === 0) playBeep(1200, 0.5);
-        }
-
-        function render() {
-            document.getElementById('time-display').innerText = formatTime(Math.max(0, state.currentTime));
-            updateProgress(state.currentTime, state.totalDuration);
-        }
-
-        function finish() {
-            clearInterval(state.timer);
-            document.getElementById('exercise-name').innerText = "DONE!";
-            document.getElementById('phase-label').innerText = "FINISHED";
-            document.getElementById('next-up-container').classList.add('hidden');
-            setAnimation("", false);
-            playBeep(1500, 1);
-        }
-
-        // Init UI
-        const listEl = document.getElementById('7m-list');
-        SEVEN_MIN_EXERCISES.forEach(ex => {
-            const li = document.createElement('li');
-            li.innerText = ex;
-            listEl.appendChild(li);
-        });
-    </script>
-</body>
-</html>
+                state.
