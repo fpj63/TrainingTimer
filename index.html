@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ultimate Training Timer</title>
+    <title>Timer Entrainement Ultimate</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
@@ -12,8 +12,6 @@
         .tab-active { color: #3b82f6; border-bottom: 3px solid #3b82f6; }
         .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
         input[type="number"] { background: #1a1a1a; border: 1px solid #333; color: white; padding: 8px; border-radius: 8px; width: 70px; text-align: center; }
-        .next-up-card { background: rgba(59, 130, 246, 0.1); border: 1px dashed #3b82f6; }
-        .body-part { transform-origin: center; transition: all 0.3s ease; }
     </style>
 </head>
 <body class="h-screen flex flex-col">
@@ -27,71 +25,78 @@
     <main class="flex-grow relative overflow-y-auto p-4 pb-24">
         <section id="page-seven" class="page-content space-y-6">
             <div class="glass p-4 rounded-2xl">
-                <h2 class="text-xl font-black mb-4 text-blue-400 uppercase">7-Minute Circuit</h2>
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Work (s)</label><input type="number" id="7m-work" value="30"></div>
-                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Rest (s)</label><input type="number" id="7m-rest" value="10"></div>
+                <h2 class="text-xl font-black mb-4 text-blue-400 uppercase">Circuit 7-Minutes</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Travail (s)</label><input type="number" id="7m-work" value="30"></div>
+                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Repos (s)</label><input type="number" id="7m-rest" value="10"></div>
                 </div>
             </div>
         </section>
 
         <section id="page-hiit" class="page-content hidden space-y-4">
             <div class="glass p-4 rounded-2xl">
-                <h2 class="text-xl font-black mb-4 text-red-500 uppercase">HIIT Interval</h2>
+                <h2 class="text-xl font-black mb-4 text-red-500 uppercase">HIIT Intervalle</h2>
                 <div class="grid grid-cols-2 gap-4">
-                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Work (s)</label><input type="number" id="hiit-work" value="20"></div>
-                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Rest (s)</label><input type="number" id="hiit-rest" value="10"></div>
-                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Rounds</label><input type="number" id="hiit-rounds" value="8"></div>
+                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Travail (s)</label><input type="number" id="hiit-work" value="20"></div>
+                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Repos (s)</label><input type="number" id="hiit-rest" value="10"></div>
+                    <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1 uppercase">Répétitions</label><input type="number" id="hiit-rounds" value="8"></div>
                 </div>
             </div>
         </section>
 
         <section id="page-emom" class="page-content hidden space-y-6">
             <div class="glass p-4 rounded-2xl">
-                <h2 class="text-xl font-black mb-4 text-purple-500 uppercase">EMOM</h2>
-                <div class="grid grid-cols-2 gap-4">
-                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Repeats</label><input type="number" id="emom-rounds" value="10"></div>
+                <h2 class="text-xl font-black mb-4 text-purple-500 uppercase">EMOM (Chaque minute)</h2>
+                <div class="grid grid-cols-1">
+                    <div><label class="block text-xs text-gray-400 mb-1 uppercase">Nombre de minutes</label><input type="number" id="emom-rounds" value="10"></div>
                 </div>
             </div>
         </section>
 
         <div id="timer-overlay" class="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center p-6 hidden">
-            <div class="absolute top-6 left-6"><button onclick="stopTimer()" class="text-gray-400 uppercase text-xs font-bold border border-gray-700 px-6 py-2 rounded-full">Exit</button></div>
-            <div id="exercise-name" class="text-3xl font-black text-center mb-1 uppercase text-blue-400">READY?</div>
-            <div id="phase-label" class="text-sm font-bold text-gray-500 uppercase mb-6 tracking-widest">PREPARATION</div>
+            <div class="absolute top-6 left-6"><button onclick="stopTimer()" class="text-gray-400 uppercase text-xs font-bold border border-gray-700 px-6 py-2 rounded-full">Quitter</button></div>
+            <div id="exercise-name" class="text-3xl font-black text-center mb-1 uppercase text-blue-400 tracking-tighter">PRÊT ?</div>
+            <div id="phase-label" class="text-sm font-bold text-gray-500 uppercase mb-6 tracking-widest">PRÉPARATION</div>
             <div class="relative w-64 h-64 flex items-center justify-center mb-8">
                 <svg class="w-full h-full"><circle cx="128" cy="128" r="120" stroke="#1a1a1a" stroke-width="8" fill="transparent" /><circle id="progress-circle" class="timer-ring" cx="128" cy="128" r="120" stroke="#3b82f6" stroke-width="8" fill="transparent" stroke-dasharray="754" stroke-dashoffset="0" stroke-linecap="round" /></svg>
                 <div id="time-display" class="absolute text-7xl font-black tracking-tighter">00:00</div>
             </div>
-            <div id="round-counter" class="mt-8 text-sm font-bold text-gray-500 uppercase tracking-widest">ROUND 1</div>
+            <div id="round-counter" class="mt-8 text-sm font-bold text-gray-500 uppercase tracking-widest">SÉQUENCE 1</div>
         </div>
     </main>
 
     <div class="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black flex justify-center">
-        <button id="start-btn" onclick="startWorkout()" class="bg-blue-600 text-white w-full max-w-xs py-4 rounded-2xl text-xl font-black shadow-lg">START WORKOUT</button>
+        <button id="start-btn" onclick="startWorkout()" class="bg-blue-600 text-white w-full max-w-xs py-4 rounded-2xl text-xl font-black shadow-lg active:scale-95 transition-all">LANCER L'ENTRAINEMENT</button>
     </div>
 
     <script>
         const SEVEN_MIN_EXERCISES = ["Jumping Jacks", "Wall Sit", "Push-Ups", "Abdominal Crunches", "Step-up onto Chair", "Squats", "Triceps Dips", "Plank", "High Knees Running", "Lunges", "Push-up Rotation", "Side Plank"];
         let state = { currentPage: 'seven', timer: null, currentTime: 0, totalDuration: 0, phase: 'prep', round: 1, totalRounds: 1, exerciseIdx: 0, audioCtx: null, wakeLock: null };
 
-        // --- SCREEN KEEP ALIVE ---
         async function requestWakeLock() {
             if ('wakeLock' in navigator) {
                 try { state.wakeLock = await navigator.wakeLock.request('screen'); } catch (err) {}
             }
         }
 
-        // --- VOICE ---
         function speak(text) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const msg = new SpeechSynthesisUtterance(text);
-                msg.volume = 1.0;
-                msg.rate = 1.0;
-                msg.lang = 'en-US';
+                msg.volume = 1.0; msg.rate = 1.0; msg.lang = 'en-US';
                 window.speechSynthesis.speak(msg);
             }
+        }
+
+        function playBeep(freq, dur) {
+            if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = state.audioCtx.createOscillator();
+            const g = state.audioCtx.createGain();
+            osc.frequency.setValueAtTime(freq, state.audioCtx.currentTime);
+            g.gain.setValueAtTime(0.2, state.audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.01, state.audioCtx.currentTime + dur);
+            osc.connect(g); g.connect(state.audioCtx.destination);
+            osc.start(); osc.stop(state.audioCtx.currentTime + dur);
         }
 
         function switchPage(page) {
@@ -100,9 +105,7 @@
             document.getElementById(`page-${page}`).classList.remove('hidden');
             document.querySelectorAll('nav button').forEach(b => b.classList.remove('tab-active'));
             document.getElementById(`tab-${page}`).classList.add('tab-active');
-            const btn = document.getElementById('start-btn');
-            const colors = {seven: 'bg-blue-600', hiit: 'bg-red-600', emom: 'bg-purple-600'};
-            btn.className = `w-full max-w-xs py-4 rounded-2xl text-xl font-black shadow-lg text-white ${colors[page]}`;
+            document.getElementById('start-btn').className = `w-full max-w-xs py-4 rounded-2xl text-xl font-black shadow-lg text-white ${page==='seven'?'bg-blue-600':page==='hiit'?'bg-red-600':'bg-purple-600'}`;
         }
 
         function startWorkout() {
@@ -115,70 +118,108 @@
             else runEMOM();
         }
 
+        // --- GESTION DES BIPS ET DU TEMPS ---
+        function runTimerLogic(phaseName, duration, onComplete, nextExerciseName = "") {
+            state.phase = phaseName;
+            state.currentTime = duration;
+            state.totalDuration = duration;
+
+            // Annonces Vocales au lancement
+            if (phaseName === 'prep' || phaseName === 'work') speak("GO");
+            else if (phaseName === 'rest') speak("REST");
+
+            document.getElementById('phase-label').innerText = phaseName.toUpperCase();
+            document.getElementById('exercise-name').innerText = nextExerciseName || phaseName.toUpperCase();
+
+            clearInterval(state.timer);
+            state.timer = setInterval(() => {
+                // Bip au milieu de la séquence
+                if (state.currentTime === Math.floor(state.totalDuration / 2) && state.totalDuration > 2) {
+                    playBeep(440, 0.2);
+                }
+                // Bips sur les 3 dernières secondes (3, 2, 1)
+                if (state.currentTime <= 3 && state.currentTime > 0) {
+                    playBeep(880, 0.1);
+                }
+
+                state.currentTime--;
+
+                if (state.currentTime < 0) {
+                    clearInterval(state.timer);
+                    playBeep(1200, 0.4); // Bip de fin de séquence
+                    onComplete();
+                }
+                render();
+            }, 1000);
+        }
+
         function runSeven() {
-            const w = parseInt(document.getElementById('7m-work').value), r = parseInt(document.getElementById('7m-rest').value);
-            state.exerciseIdx = 0; state.totalRounds = SEVEN_MIN_EXERCISES.length;
-            const startPhase = (p, d, n) => {
-                state.phase = p; state.currentTime = d; state.totalDuration = d;
-                if(p === 'work') speak("GO"); else if(p === 'rest') speak("REST");
-                document.getElementById('phase-label').innerText = p.toUpperCase();
-                document.getElementById('exercise-name').innerText = n;
-                clearInterval(state.timer);
-                state.timer = setInterval(() => {
-                    state.currentTime--;
-                    if(state.currentTime < 0) {
-                        if(p === 'work') { state.exerciseIdx++; if(state.exerciseIdx < state.totalRounds) startPhase('rest', r, "RECOVERY"); else finish(); }
-                        else startPhase('work', w, SEVEN_MIN_EXERCISES[state.exerciseIdx]);
+            const w = parseInt(document.getElementById('7m-work').value);
+            const r = parseInt(document.getElementById('7m-rest').value);
+            state.exerciseIdx = 0;
+            state.totalRounds = SEVEN_MIN_EXERCISES.length;
+
+            const nextStep = () => {
+                if (state.phase === 'prep' || state.phase === 'rest') {
+                    runTimerLogic('work', w, nextStep, SEVEN_MIN_EXERCISES[state.exerciseIdx]);
+                } else {
+                    state.exerciseIdx++;
+                    if (state.exerciseIdx < state.totalRounds) {
+                        runTimerLogic('rest', r, nextStep, "REPOS");
+                    } else {
+                        finish();
                     }
-                    render();
-                }, 1000);
+                }
             };
-            startPhase('prep', 5, "GET READY");
+            runTimerLogic('prep', 5, nextStep, "PRÉPARATION");
         }
 
         function runHIIT() {
-            const w = parseInt(document.getElementById('hiit-work').value), r = parseInt(document.getElementById('hiit-rest').value), rds = parseInt(document.getElementById('hiit-rounds').value);
+            const w = parseInt(document.getElementById('hiit-work').value);
+            const r = parseInt(document.getElementById('hiit-rest').value);
+            const rds = parseInt(document.getElementById('hiit-rounds').value);
             state.round = 1;
-            const startPhase = (p, d) => {
-                state.phase = p; state.currentTime = d; state.totalDuration = d;
-                if(p === 'work') speak("GO"); else if(p === 'rest') speak("REST");
-                document.getElementById('phase-label').innerText = p.toUpperCase();
-                document.getElementById('exercise-name').innerText = p==='work'?"WORK":"REST";
+
+            const nextStep = () => {
                 document.getElementById('round-counter').innerText = `ROUND ${state.round} / ${rds}`;
-                clearInterval(state.timer);
-                state.timer = setInterval(() => {
-                    state.currentTime--;
-                    if(state.currentTime < 0) {
-                        if(p==='prep') startPhase('work', w);
-                        else if(p==='work') startPhase('rest', r);
-                        else { state.round++; if(state.round <= rds) startPhase('work', w); else finish(); }
+                if (state.phase === 'prep' || state.phase === 'rest') {
+                    runTimerLogic('work', w, nextStep, "TRAVAIL");
+                } else {
+                    if (state.round < rds) {
+                        state.round++;
+                        runTimerLogic('rest', r, nextStep, "REPOS");
+                    } else {
+                        finish();
                     }
-                    render();
-                }, 1000);
+                }
             };
-            startPhase('prep', 5);
+            runTimerLogic('prep', 5, nextStep, "PRÉPARATION");
         }
 
         function runEMOM() {
             const rds = parseInt(document.getElementById('emom-rounds').value);
             state.round = 1;
-            const startPhase = (d) => {
-                state.currentTime = d; state.totalDuration = 60; speak("GO");
-                document.getElementById('phase-label').innerText = `ROUND ${state.round} / ${rds}`;
-                document.getElementById('exercise-name').innerText = "WORK";
-                clearInterval(state.timer);
-                state.timer = setInterval(() => {
-                    state.currentTime--;
-                    if(state.currentTime < 0) { state.round++; if(state.round <= rds) startPhase(60); else finish(); }
-                    render();
-                }, 1000);
+
+            const nextStep = () => {
+                document.getElementById('round-counter').innerText = `MINUTE ${state.round} / ${rds}`;
+                if (state.round <= rds) {
+                    runTimerLogic('work', 60, () => {
+                        state.round++;
+                        nextStep();
+                    }, "TRAVAIL");
+                } else {
+                    finish();
+                }
             };
-            startPhase(60);
+            runTimerLogic('prep', 5, nextStep, "PRÉPARATION");
         }
 
         function render() {
-            document.getElementById('time-display').innerText = `${Math.floor(state.currentTime/60).toString().padStart(2,'0')}:${(state.currentTime%60).toString().padStart(2,'0')}`;
-            document.getElementById('progress-circle').style.strokeDashoffset = 754 - (state.currentTime / state.totalDuration) * 754;
+            const min = Math.floor(Math.max(0, state.currentTime) / 60);
+            const sec = Math.max(0, state.currentTime) % 60;
+            document.getElementById('time-display').innerText = `${min.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+            const offset = 754 - (state.currentTime / state.totalDuration) * 754;
+            document.getElementById('progress-circle').style.strokeDashoffset = offset;
         }
 
         function stopTimer() { 
@@ -190,7 +231,8 @@
         function finish() { 
             clearInterval(state.timer); 
             speak("YOUR WORKOUT IS COMPLETE"); 
-            document.getElementById('exercise-name').innerText = "DONE!"; 
+            document.getElementById('exercise-name').innerText = "TERMINÉ !"; 
+            document.getElementById('phase-label').innerText = "BRAVO";
             if(state.wakeLock) { state.wakeLock.release(); state.wakeLock = null; }
         }
     </script>
