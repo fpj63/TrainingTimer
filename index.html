@@ -131,7 +131,8 @@
             state.currentTime = duration;
             state.totalDuration = duration;
 
-            if (phaseName === 'prep' || phaseName === 'work') speak("GO");
+            // Prononciation corrigée : "GOO" pour un son "GO" net
+            if (phaseName === 'prep' || phaseName === 'work') speak("GOO");
             else if (phaseName === 'rest') speak("REST");
             else if (phaseName === 'cool') speak("RECOVER");
 
