@@ -63,13 +63,16 @@
 
         <div id="timer-overlay" class="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center p-6 hidden">
             <div class="absolute top-6 left-6"><button onclick="stopTimer()" class="text-gray-400 uppercase text-xs font-bold border border-gray-700 px-6 py-2 rounded-full">Quitter</button></div>
+            
             <div id="exercise-name" class="text-3xl font-black text-center mb-1 uppercase text-blue-400 tracking-tighter">PRÊT ?</div>
-            <div id="phase-label" class="text-sm font-bold text-gray-500 uppercase mb-6 tracking-widest">PRÉPARATION</div>
-            <div class="relative w-64 h-64 flex items-center justify-center mb-8">
+            <div id="phase-label" class="text-sm font-bold text-gray-500 uppercase mb-2 tracking-widest">PRÉPARATION</div>
+            
+            <div id="round-counter" class="text-5xl font-black text-white mb-6">1 / 1</div>
+
+            <div class="relative w-64 h-64 flex items-center justify-center">
                 <svg class="w-full h-full"><circle cx="128" cy="128" r="120" stroke="#1a1a1a" stroke-width="8" fill="transparent" /><circle id="progress-circle" class="timer-ring" cx="128" cy="128" r="120" stroke="#3b82f6" stroke-width="8" fill="transparent" stroke-dasharray="754" stroke-dashoffset="0" stroke-linecap="round" /></svg>
                 <div id="time-display" class="absolute text-7xl font-black tracking-tighter">00:00</div>
             </div>
-            <div id="round-counter" class="mt-8 text-sm font-bold text-gray-500 uppercase tracking-widest">SÉQUENCE 1</div>
         </div>
     </main>
 
@@ -131,7 +134,6 @@
             state.currentTime = duration;
             state.totalDuration = duration;
 
-            // Prononciation corrigée : "GOO" pour un son "GO" net
             if (phaseName === 'prep' || phaseName === 'work') speak("GOO");
             else if (phaseName === 'rest') speak("REST");
             else if (phaseName === 'cool') speak("RECOVER");
@@ -164,6 +166,7 @@
             state.totalRounds = SEVEN_MIN_EXERCISES.length;
 
             const nextStep = () => {
+                document.getElementById('round-counter').innerText = `${state.exerciseIdx + 1} / ${state.totalRounds}`;
                 if (state.phase === 'prep' || state.phase === 'rest') {
                     runTimerLogic('work', w, nextStep, SEVEN_MIN_EXERCISES[state.exerciseIdx]);
                 } else if (state.phase === 'work') {
@@ -171,10 +174,12 @@
                     if (state.exerciseIdx < state.totalRounds) {
                         runTimerLogic('rest', r, nextStep, "REPOS");
                     } else {
+                        document.getElementById('round-counter').innerText = "FIN";
                         runTimerLogic('cool', c, finish, "COOL DOWN");
                     }
                 }
             };
+            document.getElementById('round-counter').innerText = "-";
             runTimerLogic('prep', p, nextStep, "PRÉPARATION");
         }
 
@@ -187,7 +192,7 @@
             state.round = 1;
 
             const nextStep = () => {
-                document.getElementById('round-counter').innerText = `ROUND ${state.round} / ${rds}`;
+                document.getElementById('round-counter').innerText = `${state.round} / ${rds}`;
                 if (state.phase === 'prep' || state.phase === 'rest') {
                     runTimerLogic('work', w, nextStep, "TRAVAIL");
                 } else {
@@ -195,10 +200,12 @@
                         state.round++;
                         runTimerLogic('rest', r, nextStep, "REPOS");
                     } else {
+                        document.getElementById('round-counter').innerText = "FIN";
                         runTimerLogic('cool', c, finish, "COOL DOWN");
                     }
                 }
             };
+            document.getElementById('round-counter').innerText = "-";
             runTimerLogic('prep', p, nextStep, "PRÉPARATION");
         }
 
@@ -209,16 +216,18 @@
             state.round = 1;
 
             const nextStep = () => {
-                document.getElementById('round-counter').innerText = `MINUTE ${state.round} / ${rds}`;
+                document.getElementById('round-counter').innerText = `${state.round} / ${rds}`;
                 if (state.round <= rds) {
                     runTimerLogic('work', 60, () => {
                         state.round++;
                         nextStep();
                     }, "TRAVAIL");
                 } else {
+                    document.getElementById('round-counter').innerText = "FIN";
                     runTimerLogic('cool', c, finish, "COOL DOWN");
                 }
             };
+            document.getElementById('round-counter').innerText = "-";
             runTimerLogic('prep', p, nextStep, "PRÉPARATION");
         }
 
@@ -241,6 +250,7 @@
             speak("CONGRATULATIONS YOUR WORKOUT IS COMPLETE"); 
             document.getElementById('exercise-name').innerText = "BRAVO !"; 
             document.getElementById('phase-label').innerText = "TERMINÉ";
+            document.getElementById('round-counter').innerText = "100%";
             if(state.wakeLock) { state.wakeLock.release(); state.wakeLock = null; }
         }
     </script>
