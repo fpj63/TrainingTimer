@@ -81,7 +81,8 @@
     </div>
 
     <script>
-        const SEVEN_MIN_EXERCISES = ["Jumping Jacks", "Wall Sit", "Push-Ups", "Abdominal Crunches", "Step-up onto Chair", "Squats", "Triceps Dips", "Plank", "High Knees Running", "Lunges", "Push-up Rotation", "Side Plank"];
+        // Traduction en français pour une meilleure élocution de la synthèse vocale
+        const SEVEN_MIN_EXERCISES = ["Jumping Jacks", "Chaise statique", "Pompes", "Abdominaux", "Montées sur chaise", "Squats", "Dips sur chaise", "Gainage planche", "Montées de genoux", "Fentes", "Pompes avec rotation", "Gainage latéral"];
         let state = { currentPage: 'seven', timer: null, currentTime: 0, totalDuration: 0, phase: 'prep', round: 1, totalRounds: 1, exerciseIdx: 0, audioCtx: null, wakeLock: null };
 
         async function requestWakeLock() {
@@ -94,7 +95,8 @@
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const msg = new SpeechSynthesisUtterance(text);
-                msg.volume = 1.0; msg.lang = 'en-US';
+                msg.volume = 1.0; 
+                msg.lang = 'fr-FR'; // Changement de langue en Français
                 window.speechSynthesis.speak(msg);
             }
         }
@@ -134,9 +136,26 @@
             state.currentTime = duration;
             state.totalDuration = duration;
 
-            if (phaseName === 'prep' || phaseName === 'work') speak("GOO");
-            else if (phaseName === 'rest') speak("REST");
-            else if (phaseName === 'cool') speak("RECOVER");
+            // Logique intelligente d'énonciation vocale en français
+            if (phaseName === 'prep') {
+                let msg = "Préparation.";
+                if (state.currentPage === 'seven') msg += " Premier exercice : " + SEVEN_MIN_EXERCISES[0];
+                speak(msg);
+            }
+            else if (phaseName === 'work') {
+                if (state.currentPage === 'seven') speak(nextExerciseName + ". C'est parti !");
+                else speak("Travail !");
+            }
+            else if (phaseName === 'rest') {
+                let msg = "Repos.";
+                if (state.currentPage === 'seven' && state.exerciseIdx < state.totalRounds) {
+                    msg += " Prochain exercice : " + SEVEN_MIN_EXERCISES[state.exerciseIdx];
+                }
+                speak(msg);
+            }
+            else if (phaseName === 'cool') {
+                speak("Récupération.");
+            }
 
             document.getElementById('phase-label').innerText = phaseName.toUpperCase();
             document.getElementById('exercise-name').innerText = nextExerciseName || phaseName.toUpperCase();
@@ -172,10 +191,11 @@
                 } else if (state.phase === 'work') {
                     state.exerciseIdx++;
                     if (state.exerciseIdx < state.totalRounds) {
-                        runTimerLogic('rest', r, nextStep, "REPOS");
+                        // Affiche l'exercice suivant à l'écran pendant le repos
+                        runTimerLogic('rest', r, nextStep, "REPOS - SUIVANT : " + SEVEN_MIN_EXERCISES[state.exerciseIdx].toUpperCase());
                     } else {
                         document.getElementById('round-counter').innerText = "FIN";
-                        runTimerLogic('cool', c, finish, "COOL DOWN");
+                        runTimerLogic('cool', c, finish, "RÉCUPÉRATION");
                     }
                 }
             };
@@ -201,7 +221,7 @@
                         runTimerLogic('rest', r, nextStep, "REPOS");
                     } else {
                         document.getElementById('round-counter').innerText = "FIN";
-                        runTimerLogic('cool', c, finish, "COOL DOWN");
+                        runTimerLogic('cool', c, finish, "RÉCUPÉRATION");
                     }
                 }
             };
@@ -224,7 +244,7 @@
                     }, "TRAVAIL");
                 } else {
                     document.getElementById('round-counter').innerText = "FIN";
-                    runTimerLogic('cool', c, finish, "COOL DOWN");
+                    runTimerLogic('cool', c, finish, "RÉCUPÉRATION");
                 }
             };
             document.getElementById('round-counter').innerText = "-";
@@ -247,7 +267,7 @@
 
         function finish() { 
             clearInterval(state.timer); 
-            speak("CONGRATULATIONS YOUR WORKOUT IS COMPLETE"); 
+            speak("Félicitations, votre entraînement est terminé !"); 
             document.getElementById('exercise-name').innerText = "BRAVO !"; 
             document.getElementById('phase-label').innerText = "TERMINÉ";
             document.getElementById('round-counter').innerText = "100%";
