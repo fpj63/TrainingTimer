@@ -81,22 +81,42 @@
     </div>
 
     <script>
-        // Traduction en français pour une meilleure élocution de la synthèse vocale
         const SEVEN_MIN_EXERCISES = ["Jumping Jacks", "Chaise statique", "Pompes", "Abdominaux", "Montées sur chaise", "Squats", "Dips sur chaise", "Gainage planche", "Montées de genoux", "Fentes", "Pompes avec rotation", "Gainage latéral"];
         let state = { currentPage: 'seven', timer: null, currentTime: 0, totalDuration: 0, phase: 'prep', round: 1, totalRounds: 1, exerciseIdx: 0, audioCtx: null, wakeLock: null };
 
+        // Gestion robuste du blocage de l'écran (Wake Lock)
         async function requestWakeLock() {
             if ('wakeLock' in navigator) {
-                try { state.wakeLock = await navigator.wakeLock.request('screen'); } catch (err) {}
+                try {
+                    // On ne demande le lock que s'il n'est pas déjà actif
+                    if (!state.wakeLock) {
+                        state.wakeLock = await navigator.wakeLock.request('screen');
+                        
+                        // Si le système ou le navigateur libère le lock (ex: baisse de batterie, onglet masqué)
+                        state.wakeLock.addEventListener('release', () => {
+                            state.wakeLock = null;
+                        });
+                    }
+                } catch (err) {
+                    console.log("Wake Lock refusé ou non supporté :", err);
+                }
             }
         }
+
+        // Sécurité : Si l'utilisateur quitte l'application (arrière-plan) puis revient,
+        // le navigateur casse le Wake Lock par défaut. Cet écouteur le réactive instantanément au retour.
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                requestWakeLock();
+            }
+        });
 
         function speak(text) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const msg = new SpeechSynthesisUtterance(text);
                 msg.volume = 1.0; 
-                msg.lang = 'fr-FR'; // Changement de langue en Français
+                msg.lang = 'fr-FR'; 
                 window.speechSynthesis.speak(msg);
             }
         }
@@ -119,10 +139,13 @@
             document.querySelectorAll('nav button').forEach(b => b.classList.remove('tab-active'));
             document.getElementById(`tab-${page}`).classList.add('tab-active');
             document.getElementById('start-btn').className = `w-full max-w-xs py-4 rounded-2xl text-xl font-black shadow-lg text-white ${page==='seven'?'bg-blue-600':page==='hiit'?'bg-red-600':'bg-purple-600'}`;
+            
+            // Tente de verrouiller dès qu'on navigue ou interagit avec l'app
+            requestWakeLock();
         }
 
         function startWorkout() {
-            requestWakeLock();
+            requestWakeLock(); // Double sécurité au lancement du chrono
             if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             document.getElementById('timer-overlay').classList.remove('hidden');
             
@@ -136,7 +159,6 @@
             state.currentTime = duration;
             state.totalDuration = duration;
 
-            // Logique intelligente d'énonciation vocale en français
             if (phaseName === 'prep') {
                 let msg = "Préparation.";
                 if (state.currentPage === 'seven') msg += " Premier exercice : " + SEVEN_MIN_EXERCISES[0];
@@ -191,7 +213,6 @@
                 } else if (state.phase === 'work') {
                     state.exerciseIdx++;
                     if (state.exerciseIdx < state.totalRounds) {
-                        // Affiche l'exercice suivant à l'écran pendant le repos
                         runTimerLogic('rest', r, nextStep, "REPOS - SUIVANT : " + SEVEN_MIN_EXERCISES[state.exerciseIdx].toUpperCase());
                     } else {
                         document.getElementById('round-counter').innerText = "FIN";
@@ -261,7 +282,7 @@
 
         function stopTimer() { 
             clearInterval(state.timer); 
-            if(state.wakeLock) { state.wakeLock.release(); state.wakeLock = null; }
+            // Note : L'instruction qui coupait le verrouillage (release) a été retirée pour maintenir l'écran allumé en continu
             document.getElementById('timer-overlay').classList.add('hidden'); 
         }
 
@@ -271,8 +292,11 @@
             document.getElementById('exercise-name').innerText = "BRAVO !"; 
             document.getElementById('phase-label').innerText = "TERMINÉ";
             document.getElementById('round-counter').innerText = "100%";
-            if(state.wakeLock) { state.wakeLock.release(); state.wakeLock = null; }
+            // Note : L'instruction qui coupait le verrouillage (release) a été retirée ici aussi
         }
+
+        // Lancement initial du bloqueur dès le chargement de la page
+        requestWakeLock();
     </script>
 </body>
 </html>
